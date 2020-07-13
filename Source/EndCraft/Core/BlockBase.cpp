@@ -3,7 +3,9 @@
 
 #include "BlockBase.h"
 #include "Components/BoxComponent.h"
+#include "UObject/ConstructorHelpers.h"
 #include "PaperSpriteComponent.h"
+#include "PaperSprite.h"
 
 
 // Sets default values
@@ -12,21 +14,10 @@ ABlockBase::ABlockBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	CollisionMesh = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
-	SetRootComponent(CollisionMesh);
+	SetupComponents();
+	SetupMeshes();
 
-	BaseMeshRear = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("RearMesh"));
-	BaseMeshRear->SetupAttachment(CollisionMesh);
-	BaseMeshFront = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("FrontMesh"));
-	BaseMeshFront->SetupAttachment(CollisionMesh);
-	BaseMeshLeft = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("LeftMesh"));
-	BaseMeshLeft->SetupAttachment(CollisionMesh);
-	BaseMeshRight = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("RightMesh"));
-	BaseMeshRight->SetupAttachment(CollisionMesh);
-	BaseMeshTop = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("TopMesh"));
-	BaseMeshTop->SetupAttachment(CollisionMesh);
-	BaseMeshBottom = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("BottomMesh"));
-	BaseMeshBottom->SetupAttachment(CollisionMesh);
+
 }
 
 // Called when the game starts or when spawned
@@ -43,3 +34,41 @@ void ABlockBase::Tick(float DeltaTime)
 
 }
 
+void ABlockBase::SetupComponents()
+{
+	Root = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	RootComponent = Root;
+
+	BaseMeshRear = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("RearMesh"));
+	BaseMeshRear->SetupAttachment(RootComponent);
+	BaseMeshFront = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("FrontMesh"));
+	BaseMeshFront->SetupAttachment(RootComponent);
+	BaseMeshLeft = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("LeftMesh"));
+	BaseMeshLeft->SetupAttachment(RootComponent);
+	BaseMeshRight = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("RightMesh"));
+	BaseMeshRight->SetupAttachment(RootComponent);
+	BaseMeshTop = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("TopMesh"));
+	BaseMeshTop->SetupAttachment(RootComponent);
+	BaseMeshBottom = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("BottomMesh"));
+	BaseMeshBottom->SetupAttachment(RootComponent);
+}
+
+void ABlockBase::SetupMeshes()
+{
+
+	ConstructorHelpers::FObjectFinder<UPaperSprite> DefaultSprite(TEXT("/Game/Sprites/SPR_Default.SPR_Default"));
+	BaseMeshRear->SetSprite(DefaultSprite.Object);
+	BaseMeshRear->SetRelativeLocation(FVector(0.0f, -8.0f, 0.0f));
+
+	BaseMeshFront->SetSprite(DefaultSprite.Object);
+	BaseMeshFront->SetRelativeLocation(FVector(0.0f, 8.0f, 0.0f));
+
+	BaseMeshLeft->SetSprite(DefaultSprite.Object);
+	BaseMeshLeft->SetRelativeLocation(FVector(-8.0f, 0.0f, 0.0f));
+	BaseMeshLeft->SetRelativeRotation(FQuat(0.0f, 0.0f , 90.0f, 0.0f));
+
+	BaseMeshRight->SetSprite(DefaultSprite.Object);
+	BaseMeshRight->SetRelativeLocation(FVector(8.0f, 0.0f, 0.0f));
+	BaseMeshRight->SetRelativeRotation(FQuat(0.0f, 0.0f, 90.0f, 0.0f));
+
+}

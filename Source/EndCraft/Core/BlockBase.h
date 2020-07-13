@@ -15,11 +15,8 @@ class ENDCRAFT_API ABlockBase : public AActor
 	GENERATED_BODY()
 	
 public:	
-	ABlockBase();
-	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAcces = "true"))
-	UBoxComponent* CollisionMesh = nullptr;
+	USceneComponent* Root;
 	UPROPERTY(VisibleDefaultsOnly)
 	UPaperSpriteComponent* BaseMeshRear;
 	UPROPERTY(VisibleDefaultsOnly)
@@ -33,6 +30,10 @@ public:
 	UPROPERTY(VisibleDefaultsOnly)
 	UPaperSpriteComponent* BaseMeshBottom;
 
+	ABlockBase();
+	virtual void Tick(float DeltaTime) override;
+
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -44,7 +45,8 @@ private:
 	bool Gravity;
 	bool AllowThrough;
 
-	
 
+	void SetupComponents();
+	void SetupMeshes();
 
 };
