@@ -2,6 +2,7 @@
 
 
 #include "NoisePerl.h"
+#include "Math/UnrealMathUtility.h"
 
 NoisePerl::NoisePerl()
 {
