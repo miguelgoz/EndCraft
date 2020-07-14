@@ -65,10 +65,24 @@ void ABlockBase::SetupMeshes()
 
 	BaseMeshLeft->SetSprite(DefaultSprite.Object);
 	BaseMeshLeft->SetRelativeLocation(FVector(-8.0f, 0.0f, 0.0f));
-	BaseMeshLeft->SetRelativeRotation(FQuat(0.0f, 0.0f , 90.0f, 0.0f));
+	BaseMeshLeft->SetRelativeRotation(FQuat::MakeFromEuler(FVector(0.0f,0.0f,90.0f)));
 
 	BaseMeshRight->SetSprite(DefaultSprite.Object);
 	BaseMeshRight->SetRelativeLocation(FVector(8.0f, 0.0f, 0.0f));
-	BaseMeshRight->SetRelativeRotation(FQuat(0.0f, 0.0f, 90.0f, 0.0f));
+	BaseMeshRight->SetRelativeRotation(FQuat::MakeFromEuler(FVector(0.0f, 0.0f, -90.0f)));
 
+	BaseMeshTop->SetSprite(DefaultSprite.Object);
+	BaseMeshTop->SetRelativeLocation(FVector(0.0f, 0.0f, 8.0f));
+	BaseMeshTop->SetRelativeRotation(FQuat::MakeFromEuler(FVector(90.0f, 0.0f, 0.0f)));
+
+	BaseMeshBottom->SetSprite(DefaultSprite.Object);
+	BaseMeshBottom->SetRelativeLocation(FVector(0.0f, 0.0f, -8.0f));
+	BaseMeshBottom->SetRelativeRotation(FQuat::MakeFromEuler(FVector(90.0f, 0.0f, 0.0f)));
+
+	BaseMeshRear->SetCastShadow(true);
+	BaseMeshFront->SetCastShadow(true);
+	BaseMeshLeft->SetCastShadow(true);
+	BaseMeshRight->SetCastShadow(true);
+	BaseMeshTop->SetCastShadow(true);
+	BaseMeshBottom->SetCastShadow(true);
 }
