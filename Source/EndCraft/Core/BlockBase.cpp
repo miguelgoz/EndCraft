@@ -86,3 +86,4 @@ void ABlockBase::SetupMeshes()
 	BaseMeshTop->SetCastShadow(true);
 	BaseMeshBottom->SetCastShadow(true);
 }
+
