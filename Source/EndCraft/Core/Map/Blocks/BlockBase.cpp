@@ -12,7 +12,7 @@
 ABlockBase::ABlockBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	SetupComponents();
 	SetupMeshes();
@@ -55,7 +55,6 @@ void ABlockBase::SetupComponents()
 
 void ABlockBase::SetupMeshes()
 {
-
 	ConstructorHelpers::FObjectFinder<UPaperSprite> DefaultSprite(TEXT("/Game/Sprites/SPR_Default.SPR_Default"));
 	BaseMeshRear->SetSprite(DefaultSprite.Object);
 	BaseMeshRear->SetRelativeLocation(FVector(0.0f, -8.0f, 0.0f));
