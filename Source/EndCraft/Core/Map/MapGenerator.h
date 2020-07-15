@@ -17,7 +17,8 @@ class ENDCRAFT_API AMapGenerator : public AActor
 	
 public:	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Blocks")
-	TArray<TSubclassOf<ABlockBase>> Blocks;
+	TArray<TSubclassOf<ABlockBase>> TemplateBlocks;
+	TArray<ABlockBase*> Blocks;
 	
 	AMapGenerator();
 	virtual void Tick(float DeltaTime) override;
@@ -34,10 +35,12 @@ private:
 	int MapWidth = 32;
 	int MapHeight = 32;
 	int Seed = 70000;
-	float NoiseScale = 100.0f;
+	int Octaves = 4;
+	float NoiseScale = 10.0f;
 	float Persistance = 0.005f;
 	float Lacunarity = 1.0f;
 	
 	
 	void DrawNoiseMap(TArray<TArray<float>*>* NoiseMap);
+	void InitializeBlocks();
 };

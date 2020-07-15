@@ -17,6 +17,7 @@ AMapGenerator::AMapGenerator()
 void AMapGenerator::BeginPlay()
 {
 	Super::BeginPlay();
+	InitializeBlocks();
 	GenerateMap();
 }
 
@@ -26,10 +27,24 @@ void AMapGenerator::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-
+void AMapGenerator::InitializeBlocks()
+{
+	FActorSpawnParameters SpawnInfo;
+	for (int i = 0; i < TemplateBlocks.Num(); i++)
+	{
+		ABlockBase* Block = GetWorld()->SpawnActor<ABlockBase>(TemplateBlocks[i], SpawnInfo);
+		Block->SetActorEnableCollision(false);
+		Block->SetActorHiddenInGame(true);
+		Block->SetActorTickEnabled(false);
+		Blocks.Add(Block);
+	}
+	Blocks.Sort([](const ABlockBase& LB, const ABlockBase& RB) -> bool {
+		return LB.HeightValue < RB.HeightValue;
+	});
+}
 void AMapGenerator::GenerateMap()
 {
-	TArray<TArray<float>*>* NoiseMap = NoisePerl::GenerateNoiseMap(MapWidth, MapHeight, Seed, NoiseScale, Blocks.Num(), Persistance, Lacunarity);
+	TArray<TArray<float>*>* NoiseMap = NoisePerl::GenerateNoiseMap(MapWidth, MapHeight, Seed, NoiseScale, Octaves, Persistance, Lacunarity);
 
 	DrawNoiseMap(NoiseMap);
 }
@@ -37,19 +52,26 @@ void AMapGenerator::GenerateMap()
 void AMapGenerator::DrawNoiseMap(TArray<TArray<float>*>* NoiseMap)
 {
 	FRotator Rotation(0.0f, 0.0f, 0.0f);
+	FActorSpawnParameters SpawnInfo;
 	for (int y = 0; y != NoiseMap->Num(); y++)
 	{
 		TArray<float>* ValuesX = (*NoiseMap)[y];
 		for (int x = 0; x != ValuesX->Num(); x++)
 		{		
-			float Value = (*ValuesX)[x];
-
-			TSubclassOf<ABlockBase> TypeOfBlock = Blocks[(int)Value];
-
+			float CurrentHeight = (*ValuesX)[x];
+		
 			FVector Location((float)x*16.0f, (float)y * 16.0f, 0.0f);
+			for (int i = 0; i < Blocks.Num(); i++)
+			{
+				if (CurrentHeight <= Blocks[i]->HeightValue)
+				{
+					GetWorld()->SpawnActor<ABlockBase>(TemplateBlocks[i], Location, Rotation, SpawnInfo);
+					break;
+				}
 
-			FActorSpawnParameters SpawnInfo;
-			GetWorld()->SpawnActor<ABlockBase>(TypeOfBlock, Location, Rotation, SpawnInfo);
+			}
+			
+			
 		}
 	}
 }

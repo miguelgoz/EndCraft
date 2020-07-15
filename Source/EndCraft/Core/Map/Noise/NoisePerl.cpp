@@ -47,7 +47,7 @@ TArray<TArray<float>*>* NoisePerl::GenerateNoiseMap(int MapWidth, int MapHeight,
 				float SampleY = float(((float)y- MapHeight) / Scale * Frequency) + Seed;
 
 				FVector2D CurrentLocation = FVector2D(SampleX, SampleY);
-				float PerlinValue = FMath::PerlinNoise2D(CurrentLocation) * 2.0f - 1.0f;
+				float PerlinValue = FMath::PerlinNoise2D(CurrentLocation) * 2.0f * -1.0f;
 				
 				NoiseHeight += PerlinValue * Amplitude;
 				Amplitude *= Persistance;
@@ -55,7 +55,7 @@ TArray<TArray<float>*>* NoisePerl::GenerateNoiseMap(int MapWidth, int MapHeight,
 
 
 
-				UE_LOG(LogTemp, Warning, TEXT("Value = %f"), NoiseHeight);
+				
 
 				
 			}
@@ -78,8 +78,18 @@ TArray<TArray<float>*>* NoisePerl::GenerateNoiseMap(int MapWidth, int MapHeight,
 		for (int x = 0; x < MapWidth; x++)
 		{
 			float NoiseHeight = (*ContentMap)[x];
-			float NewNoiseHeightLerp = UKismetMathLibrary::InverseLerp(MinNoiseHeight, MaxNoiseHeight, NoiseHeight);
+			float NewNoiseHeightLerp = UKismetMathLibrary::InverseLerp(0.000000000000000f, 1.000000000000000000f, NoiseHeight);
+			if (NewNoiseHeightLerp > 1.0f) 
+			{
+				NewNoiseHeightLerp = 1.0f;
+			}
+			else if (NewNoiseHeightLerp < 0.0f)
+			{
+				NewNoiseHeightLerp = 0.0f;
+			}
 			(*ContentMap)[x] = NewNoiseHeightLerp;
+
+			UE_LOG(LogTemp, Warning, TEXT("Value = %f"), NewNoiseHeightLerp);
 		}
 	}
 

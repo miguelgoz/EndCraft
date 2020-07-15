@@ -30,6 +30,11 @@ public:
 	UPROPERTY(VisibleDefaultsOnly)
 	UPaperSpriteComponent* BaseMeshBottom;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MapGenerator")
+	float HeightValue = 0.0f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attributes")
+	FString Name = "Without NAME!!";
+
 	ABlockBase();
 	virtual void Tick(float DeltaTime) override;
 
@@ -39,7 +44,6 @@ protected:
 
 private:
 
-	FString Name;
 	float Durability;
 	float Weight;
 	bool Gravity;
