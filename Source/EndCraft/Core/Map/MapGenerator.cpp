@@ -29,7 +29,7 @@ void AMapGenerator::Tick(float DeltaTime)
 
 void AMapGenerator::GenerateMap()
 {
-	TArray<TArray<float>*>* NoiseMap = NoisePerl::GenerateNoiseMap(MapWidth, MapHeight, NoiseScale, Blocks.Num(), Persistance, Lacunarity);
+	TArray<TArray<float>*>* NoiseMap = NoisePerl::GenerateNoiseMap(MapWidth, MapHeight, Seed, NoiseScale, Blocks.Num(), Persistance, Lacunarity);
 
 	DrawNoiseMap(NoiseMap);
 }

@@ -33,9 +33,11 @@ private:
 	
 	int MapWidth = 32;
 	int MapHeight = 32;
+	int Seed = 70000;
 	float NoiseScale = 100.0f;
 	float Persistance = 0.005f;
 	float Lacunarity = 1.0f;
+	
 	
 	void DrawNoiseMap(TArray<TArray<float>*>* NoiseMap);
 };

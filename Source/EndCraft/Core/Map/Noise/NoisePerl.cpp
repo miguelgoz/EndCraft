@@ -13,9 +13,10 @@ NoisePerl::NoisePerl()
 NoisePerl::~NoisePerl()
 {
 }
-TArray<TArray<float>*>* NoisePerl::GenerateNoiseMap(int MapWidth, int MapHeight, float Scale, int Octaves, float Persistance, float Lacunarity)
+TArray<TArray<float>*>* NoisePerl::GenerateNoiseMap(int MapWidth, int MapHeight, int Seed, float Scale, int Octaves, float Persistance, float Lacunarity)
 {
 	TArray<TArray<float>*>* ContentNoise = new TArray<TArray<float>*>();
+	
 
 	if (Scale <= 0.0f)
 	{
@@ -24,6 +25,9 @@ TArray<TArray<float>*>* NoisePerl::GenerateNoiseMap(int MapWidth, int MapHeight,
 	
 	float MaxNoiseHeight = std::numeric_limits<float>::max();
 	float MinNoiseHeight = std::numeric_limits<float>::min();
+
+	float HalfWidth = MapWidth / 2.0f;
+	float HalfHeight = MapHeight / 2.0f;
 
 	for (int y = 0; y < MapHeight; y++)
 	{
@@ -39,8 +43,8 @@ TArray<TArray<float>*>* NoisePerl::GenerateNoiseMap(int MapWidth, int MapHeight,
 
 			for (int i = 0; i < Octaves; i++)
 			{
-				float SampleX = float((float)x / Scale * Frequency);
-				float SampleY = float((float)y / Scale * Frequency);
+				float SampleX = float(((float)x- MapWidth) / Scale * Frequency) + Seed;
+				float SampleY = float(((float)y- MapHeight) / Scale * Frequency) + Seed;
 
 				FVector2D CurrentLocation = FVector2D(SampleX, SampleY);
 				float PerlinValue = FMath::PerlinNoise2D(CurrentLocation) * 2.0f - 1.0f;
