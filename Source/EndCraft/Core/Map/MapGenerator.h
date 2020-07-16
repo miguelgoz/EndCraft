@@ -32,13 +32,13 @@ protected:
 private:
 
 	
-	int MapWidth = 32;
-	int MapHeight = 32;
+	int MapWidth = 64;
+	int MapHeight = 64;
 	int Seed = 70000;
 	int Octaves = 4;
-	float NoiseScale = 10.0f;
+	float NoiseScale = 100.0f;
 	float Persistance = 0.005f;
-	float Lacunarity = 1.0f;
+	float Lacunarity = 0.05f;
 	
 	
 	void DrawNoiseMap(TArray<TArray<float>*>* NoiseMap);

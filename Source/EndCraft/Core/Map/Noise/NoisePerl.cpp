@@ -23,8 +23,8 @@ TArray<TArray<float>*>* NoisePerl::GenerateNoiseMap(int MapWidth, int MapHeight,
 		Scale = 0.0001f;
 	}
 	
-	float MaxNoiseHeight = std::numeric_limits<float>::max();
-	float MinNoiseHeight = std::numeric_limits<float>::min();
+	float MaxNoiseHeight = std::numeric_limits<float>::min();
+	float MinNoiseHeight = std::numeric_limits<float>::max();
 
 	float HalfWidth = MapWidth / 2.0f;
 	float HalfHeight = MapHeight / 2.0f;
@@ -43,30 +43,28 @@ TArray<TArray<float>*>* NoisePerl::GenerateNoiseMap(int MapWidth, int MapHeight,
 
 			for (int i = 0; i < Octaves; i++)
 			{
-				float SampleX = float(((float)x- MapWidth) / Scale * Frequency) + Seed;
-				float SampleY = float(((float)y- MapHeight) / Scale * Frequency) + Seed;
+				float SampleX = (float)x;
+				float SampleY = (float)y;
+				SampleX = (SampleX - MapWidth) / Scale * Frequency + Seed;
+				SampleY = (SampleY - MapHeight) / Scale * Frequency + Seed;
 
 				FVector2D CurrentLocation = FVector2D(SampleX, SampleY);
-				float PerlinValue = FMath::PerlinNoise2D(CurrentLocation) * 2.0f * -1.0f;
+				float PerlinValue = FMath::PerlinNoise2D(CurrentLocation) * 2.0f - 1.0f;
 				
 				NoiseHeight += PerlinValue * Amplitude;
 				Amplitude *= Persistance;
-				Frequency *= Lacunarity;
-
-
-
-				
+				Frequency *= Lacunarity;	
 
 				
 			}
 
 			if (NoiseHeight > MaxNoiseHeight)
 			{
-				NoiseHeight = MaxNoiseHeight;
+				MaxNoiseHeight = NoiseHeight;
 			}
 			else if (NoiseHeight < MinNoiseHeight)
 			{
-				NoiseHeight = MinNoiseHeight;
+				MinNoiseHeight = NoiseHeight;
 			}
 			ContentMap->Add(NoiseHeight);
 		}
@@ -78,15 +76,8 @@ TArray<TArray<float>*>* NoisePerl::GenerateNoiseMap(int MapWidth, int MapHeight,
 		for (int x = 0; x < MapWidth; x++)
 		{
 			float NoiseHeight = (*ContentMap)[x];
-			float NewNoiseHeightLerp = UKismetMathLibrary::InverseLerp(0.000000000000000f, 1.000000000000000000f, NoiseHeight);
-			if (NewNoiseHeightLerp > 1.0f) 
-			{
-				NewNoiseHeightLerp = 1.0f;
-			}
-			else if (NewNoiseHeightLerp < 0.0f)
-			{
-				NewNoiseHeightLerp = 0.0f;
-			}
+			float NewNoiseHeightLerp = UKismetMathLibrary::InverseLerp(MinNoiseHeight, MaxNoiseHeight, NoiseHeight);
+		
 			(*ContentMap)[x] = NewNoiseHeightLerp;
 
 			UE_LOG(LogTemp, Warning, TEXT("Value = %f"), NewNoiseHeightLerp);

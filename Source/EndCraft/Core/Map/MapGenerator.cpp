@@ -39,7 +39,7 @@ void AMapGenerator::InitializeBlocks()
 		Blocks.Add(Block);
 	}
 	Blocks.Sort([](const ABlockBase& LB, const ABlockBase& RB) -> bool {
-		return LB.HeightValue < RB.HeightValue;
+		return LB.HeightValue > RB.HeightValue;
 	});
 }
 void AMapGenerator::GenerateMap()
@@ -60,7 +60,7 @@ void AMapGenerator::DrawNoiseMap(TArray<TArray<float>*>* NoiseMap)
 		{		
 			float CurrentHeight = (*ValuesX)[x];
 		
-			FVector Location((float)x*16.0f, (float)y * 16.0f, 0.0f);
+			FVector Location((float)x*16.0f, (float)y * 16.0f, ((int)((CurrentHeight)*10.0f))*16.0f);
 			for (int i = 0; i < Blocks.Num(); i++)
 			{
 				if (CurrentHeight <= Blocks[i]->HeightValue)
