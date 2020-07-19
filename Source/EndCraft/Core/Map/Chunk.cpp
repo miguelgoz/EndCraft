@@ -77,13 +77,17 @@ void AChunk::DrawNextBlock()
 	{
 		float CurrentHeight = (*ValuesX)[x];
 
-		FVector Location((float)x * 16.0f, (float)y * 16.0f, ((int)((CurrentHeight) * 10.0f)) * 16.0f);
+		float z = ((int)((CurrentHeight) * 10.0f)) * 16.0f;
+
+		FVector Location((float)x * 16.0f, (float)y * 16.0f, z);
 
 		for (int i = 0; i < Blocks.Num(); i++)
 		{
 			if (CurrentHeight <= Blocks[i]->HeightValue)
 			{
-				GetWorld()->SpawnActor<ABlockBase>(TemplateBlocks[i], Location, Rotation, SpawnInfo);
+				ABlockBase* NewBlock = GetWorld()->SpawnActor<ABlockBase>(TemplateBlocks[i], Location, Rotation, SpawnInfo);
+				BlocksGenerated.Add(NewBlock);
+				DrawDeepBlocks(NewBlock->DeepBlock,z, NewBlock->DeepBlocks);
 				break;
 			}
 
@@ -91,4 +95,21 @@ void AChunk::DrawNextBlock()
 		x++;
 	}
 	
+}
+void AChunk::DrawDeepBlocks(TSubclassOf<ABlockBase> NewBlock, int z, int Deep)
+{
+	if (!NewBlock)
+	{
+		return;
+	}
+	FRotator Rotation(0.0f, 0.0f, 0.0f);
+	FActorSpawnParameters SpawnInfo;
+	for (int i = 1; i <= Deep; i++)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Deep = %f"), z);
+		z = z - 16.0f;
+		FVector Location((float)x * 16.0f, (float)y * 16.0f, z);
+		ABlockBase* NewBlockDeep = GetWorld()->SpawnActor<ABlockBase>(NewBlock, Location, Rotation, SpawnInfo);
+		BlocksGenerated.Add(NewBlockDeep);
+	}
 }

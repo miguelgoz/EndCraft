@@ -20,6 +20,7 @@ public:
 	USceneComponent* Root;
 	UPROPERTY(VisibleDefaultsOnly)
 	UStaticMeshComponent* BaseMeshRear;
+	
 
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MapGenerator")
@@ -28,9 +29,12 @@ public:
 	int DeepBlocks = 5;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attributes")
 	FString Name = "Without NAME!!";
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MapGenerator")
+	TSubclassOf<ABlockBase> DeepBlock;
 
 	ABlockBase();
 	virtual void Tick(float DeltaTime) override;
+
 
 
 protected:

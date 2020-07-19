@@ -58,6 +58,7 @@ private:
 
 
 	void DrawNextBlock();
+	void DrawDeepBlocks(TSubclassOf<ABlockBase> NewBlock, int z, int Deep);
 	void InitializeBlocks();
 
 };
