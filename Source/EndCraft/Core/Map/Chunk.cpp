@@ -11,14 +11,15 @@ AChunk::AChunk()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	InitializeBlocks();
-}
 
+}
 // Called when the game starts or when spawned
 void AChunk::BeginPlay()
 {
 	Super::BeginPlay();
 	GenerateChunk();
+	InitializeBlocks();
+
 }
 
 // Called every frame
@@ -62,7 +63,7 @@ void AChunk::DrawNextBlock()
 	FActorSpawnParameters SpawnInfo;
 	if (y == NoiseMap->Num()) 
 	{
-		IsGenerated = false;
+		IsGenerated = true;
 		return;
 	}
 	TArray<float>* ValuesX = (*NoiseMap)[y];
