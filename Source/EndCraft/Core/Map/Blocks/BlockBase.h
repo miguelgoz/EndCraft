@@ -8,7 +8,7 @@
 #include "BlockBase.generated.h"
 
 
-class UBoxComponent;
+
 UCLASS()
 class ENDCRAFT_API ABlockBase : public AActor
 {
@@ -16,22 +16,16 @@ class ENDCRAFT_API ABlockBase : public AActor
 	
 public:	
 
+	UPROPERTY(VisibleDefaultsOnly)
 	USceneComponent* Root;
 	UPROPERTY(VisibleDefaultsOnly)
-	UPaperSpriteComponent* BaseMeshRear;
-	UPROPERTY(VisibleDefaultsOnly)
-	UPaperSpriteComponent* BaseMeshFront;
-	UPROPERTY(VisibleDefaultsOnly)
-	UPaperSpriteComponent* BaseMeshLeft;
-	UPROPERTY(VisibleDefaultsOnly)
-	UPaperSpriteComponent* BaseMeshRight;
-	UPROPERTY(VisibleDefaultsOnly)
-	UPaperSpriteComponent* BaseMeshTop;
-	UPROPERTY(VisibleDefaultsOnly)
-	UPaperSpriteComponent* BaseMeshBottom;
+	UStaticMeshComponent* BaseMeshRear;
+
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MapGenerator")
 	float HeightValue = 0.0f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MapGenerator")
+	int DeepBlocks = 5;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attributes")
 	FString Name = "Without NAME!!";
 
@@ -48,9 +42,5 @@ private:
 	float Weight;
 	bool Gravity;
 	bool AllowThrough;
-
-
-	void SetupComponents();
-	void SetupMeshes();
 
 };

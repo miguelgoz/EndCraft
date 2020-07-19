@@ -13,7 +13,7 @@ NoisePerl::NoisePerl()
 NoisePerl::~NoisePerl()
 {
 }
-TArray<TArray<float>*>* NoisePerl::GenerateNoiseMap(int MapWidth, int MapHeight, int Seed, float Scale, int Octaves, float Persistance, float Lacunarity)
+TArray<TArray<float>*>* NoisePerl::GenerateNoiseMap(int ChunkSize, int Seed, float Scale, int Octaves, float Persistance, float Lacunarity, int X0, int Y0)
 {
 	TArray<TArray<float>*>* ContentNoise = new TArray<TArray<float>*>();
 	
@@ -26,16 +26,16 @@ TArray<TArray<float>*>* NoisePerl::GenerateNoiseMap(int MapWidth, int MapHeight,
 	float MaxNoiseHeight = std::numeric_limits<float>::min();
 	float MinNoiseHeight = std::numeric_limits<float>::max();
 
-	float HalfWidth = MapWidth / 2.0f;
-	float HalfHeight = MapHeight / 2.0f;
+	float HalfWidth = ChunkSize / 2.0f;
+	float HalfHeight = ChunkSize / 2.0f;
 
-	for (int y = 0; y < MapHeight; y++)
+	for (int y = Y0; y <  Y0+ChunkSize ; y++)
 	{
 		TArray<float>* ContentMap = new TArray<float>();
 
 		ContentNoise->Add(ContentMap);
 
-		for (int x = 0; x < MapWidth; x++)
+		for (int x = X0; x < X0+ChunkSize; x++)
 		{
 			float Amplitude = 1.0f;
 			float Frequency = 1.0f;
@@ -45,8 +45,8 @@ TArray<TArray<float>*>* NoisePerl::GenerateNoiseMap(int MapWidth, int MapHeight,
 			{
 				float SampleX = (float)x;
 				float SampleY = (float)y;
-				SampleX = (SampleX - MapWidth) / Scale * Frequency + Seed;
-				SampleY = (SampleY - MapHeight) / Scale * Frequency + Seed;
+				SampleX = (SampleX - ChunkSize) / Scale * Frequency + Seed;
+				SampleY = (SampleY - ChunkSize) / Scale * Frequency + Seed;
 
 				FVector2D CurrentLocation = FVector2D(SampleX, SampleY);
 				float PerlinValue = FMath::PerlinNoise2D(CurrentLocation) * 2.0f - 1.0f;
@@ -70,10 +70,10 @@ TArray<TArray<float>*>* NoisePerl::GenerateNoiseMap(int MapWidth, int MapHeight,
 		}
 	}
 
-	for (int y = 0; y < MapHeight; y++)
+	for (int y = 0; y < ChunkSize; y++)
 	{
 		TArray<float>* ContentMap = (*ContentNoise)[y];
-		for (int x = 0; x < MapWidth; x++)
+		for (int x = 0; x < ChunkSize; x++)
 		{
 			float NoiseHeight = (*ContentMap)[x];
 			float NewNoiseHeightLerp = UKismetMathLibrary::InverseLerp(MinNoiseHeight, MaxNoiseHeight, NoiseHeight);
