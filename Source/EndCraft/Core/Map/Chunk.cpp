@@ -29,7 +29,10 @@ void AChunk::Tick(float DeltaTime)
 	
 	if (!IsGenerated)
 	{
-		DrawNextBlock();
+		for (int i = 0; i < 50 && !IsGenerated; i++)
+		{
+			DrawNextBlock();
+		}
 	}
 	else 
 	{
